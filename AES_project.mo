@@ -2,108 +2,174 @@ package AES_project
   package ElecSys_power_frequency_control
     model BO_rigid_two_generators_PriSec
       extends AES.Icons.CourseworkModel;
-      Modelica.Blocks.Sources.RealExpression DPe(y = if time < 10 then 0 else 5e6) annotation(
-        Placement(visible = true, transformation(origin = {68, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Math.Feedback Pbal annotation(
-        Placement(transformation(origin = {130, -20}, extent = {{-10, 10}, {10, -10}})));
+      Modelica.Blocks.Sources.RealExpression N_Pe(y = if time < 3600 then 30e6 else if time < 7200 then 60e6 else if time < 10800 then 90e6 else if time < 14400 then 120e6 else if time < 18000 then 150e6 else if time < 21600 then 180e6 else if time < 25200 then 210e6 else if time < 28800 then 240e6 else if time < 32400 then 210e6 else if time < 36000 then 180e6 else 150e6) annotation(
+        Placement(transformation(origin = {210, 56}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Math.Feedback Pbal annotation(
+        Placement(transformation(origin = {268, -20}, extent = {{-10, 10}, {10, -10}})));
       Modelica.Blocks.Math.Gain fb(k = -1) annotation(
-        Placement(transformation(origin = {66, -112}, extent = {{10, -10}, {-10, 10}})));
+        Placement(transformation(origin = {204, -112}, extent = {{10, -10}, {-10, 10}})));
       Modelica.Blocks.Continuous.TransferFunction g1(a = {80, 24, 1}, b = {1}) annotation(
-        Placement(visible = true, transformation(origin = {-12, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(transformation(origin = {126, 0}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Continuous.TransferFunction g2(a = {80, 24, 1}, b = {1}) annotation(
-        Placement(visible = true, transformation(origin = {-12, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(transformation(origin = {126, -40}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Math.Gain Pn1(k = 50e6) annotation(
-        Placement(visible = true, transformation(origin = {28, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(transformation(origin = {166, 0}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Math.Gain Pn2(k = 100e6) annotation(
-        Placement(visible = true, transformation(origin = {28, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(transformation(origin = {166, -40}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Math.Add as1 annotation(
         Placement(visible = true, transformation(origin = {-90, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Blocks.Math.Add as2 annotation(
         Placement(visible = true, transformation(origin = {-50, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Math.Gain beta1(k = 1.8588e-4) annotation(
+      Modelica.Blocks.Math.Gain beta1(k = 50/(100 + 120 + 50)) annotation(
         Placement(visible = true, transformation(origin = {-110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
-      Modelica.Blocks.Math.Gain beta2(k = 9.2941e-5) annotation(
+      Modelica.Blocks.Math.Gain beta2(k = 100/(100 + 120 + 50)) annotation(
         Placement(visible = true, transformation(origin = {-70, 50}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
-      Modelica.Blocks.Continuous.Integrator Cs(k = 5e1) annotation(
-        Placement(transformation(origin = {-154, 86}, extent = {{-10, -10}, {10, 10}})));
+      Modelica.Blocks.Continuous.Integrator Cs(k = 1.5e-2) annotation(
+        Placement(transformation(origin = {-162, 86}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Continuous.TransferFunction Cp1(a = {1}, b = {1.0838}) annotation(
         Placement(visible = true, transformation(origin = {-150, -6}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Blocks.Continuous.TransferFunction Cp2(a = {1}, b = {0.5419}) annotation(
         Placement(visible = true, transformation(origin = {-150, -46}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Blocks.Math.Add3 add3 annotation(
-        Placement(transformation(origin = {102, -20}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {240, -20}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Math.Add as3 annotation(
-        Placement(transformation(origin = {-14, -80}, extent = {{-10, -10}, {10, 10}})));
-      Modelica.Blocks.Math.Gain beta3(k = 7.7451e-5) annotation(
+        Placement(transformation(origin = {-20, -82}, extent = {{-10, -10}, {10, 10}})));
+      Modelica.Blocks.Math.Gain beta3(k = 120/(100 + 120 + 50)) annotation(
         Placement(transformation(origin = {-32, 50}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
       Modelica.Blocks.Continuous.TransferFunction g3(a = {80, 24, 1}, b = {1}) annotation(
-        Placement(transformation(origin = {20, -80}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {158, -80}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Math.Gain Pn3(k = 120e6) annotation(
-        Placement(transformation(origin = {50, -80}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {188, -80}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Continuous.TransferFunction Cp3(a = {1}, b = {0.4516}) annotation(
         Placement(transformation(origin = {-152, -88}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Continuous.TransferFunction Net(a = {(55000*(2*3.14*50)^2), 0}, b = {1}) annotation(
-        Placement(transformation(origin = {160, -22}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {322, -20}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Math.Add as4 annotation(
+        Placement(transformation(origin = {12, 6}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Math.Add as5 annotation(
+        Placement(transformation(origin = {48, -36}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Math.Add as6 annotation(
+        Placement(transformation(origin = {98, -80}, extent = {{-10, -10}, {10, 10}})));
+  TimeSwitchBlock timeSwitchBlock annotation(
+        Placement(transformation(origin = {-16, 84}, extent = {{-10, -10}, {10, 10}})));
     equation
-      connect(DPe.y, Pbal.u2) annotation(
-        Line(points = {{79, 20}, {121, 20}, {121, -12}, {130, -12}}, color = {0, 0, 127}));
       connect(g1.y, Pn1.u) annotation(
-        Line(points = {{-1, 0}, {15, 0}}, color = {0, 0, 127}));
+        Line(points = {{137, 0}, {153, 0}}, color = {0, 0, 127}));
       connect(g2.y, Pn2.u) annotation(
-        Line(points = {{-1, -40}, {15, -40}}, color = {0, 0, 127}));
+        Line(points = {{137, -40}, {153, -40}}, color = {0, 0, 127}));
       connect(beta2.y, as2.u1) annotation(
         Line(points = {{-70, 39}, {-70, -34}, {-62, -34}}, color = {0, 0, 127}));
       connect(beta1.y, as1.u1) annotation(
         Line(points = {{-110, 39}, {-110, 6}, {-102, 6}}, color = {0, 0, 127}));
-      connect(as1.y, g1.u) annotation(
-        Line(points = {{-79, 0}, {-25, 0}}, color = {0, 0, 127}));
       connect(Cp1.y, as1.u2) annotation(
         Line(points = {{-138, -6}, {-102, -6}}, color = {0, 0, 127}));
       connect(Cp2.y, as2.u2) annotation(
         Line(points = {{-139, -46}, {-62, -46}}, color = {0, 0, 127}));
       connect(fb.y, Cp2.u) annotation(
-        Line(points = {{55, -112}, {-180, -112}, {-180, -46}, {-162, -46}}, color = {0, 0, 127}));
+        Line(points = {{193, -112}, {-180, -112}, {-180, -46}, {-162, -46}}, color = {0, 0, 127}));
       connect(Cp2.u, Cp1.u) annotation(
         Line(points = {{-162, -46}, {-180, -46}, {-180, -6}, {-162, -6}}, color = {0, 0, 127}));
       connect(Cp1.u, Cs.u) annotation(
-        Line(points = {{-162, -6}, {-180, -6}, {-180, 86}, {-166, 86}}, color = {0, 0, 127}));
-      connect(as2.y, g2.u) annotation(
-        Line(points = {{-39, -40}, {-24, -40}}, color = {0, 0, 127}));
+        Line(points = {{-162, -6}, {-180, -6}, {-180, 86}, {-174, 86}}, color = {0, 0, 127}));
       connect(add3.y, Pbal.u1) annotation(
-        Line(points = {{113, -20}, {122, -20}}, color = {0, 0, 127}));
+        Line(points = {{251, -20}, {260, -20}}, color = {0, 0, 127}));
       connect(Pn1.y, add3.u1) annotation(
-        Line(points = {{40, 0}, {90, 0}, {90, -12}}, color = {0, 0, 127}));
+        Line(points = {{177, 0}, {227, 0}, {227, -12}}, color = {0, 0, 127}));
       connect(Pn2.y, add3.u2) annotation(
-        Line(points = {{40, -40}, {56, -40}, {56, -20}, {90, -20}}, color = {0, 0, 127}));
+        Line(points = {{177, -40}, {193, -40}, {193, -20}, {227, -20}}, color = {0, 0, 127}));
       connect(g3.y, Pn3.u) annotation(
-        Line(points = {{31, -80}, {38, -80}}, color = {0, 0, 127}));
+        Line(points = {{169, -80}, {176, -80}}, color = {0, 0, 127}));
       connect(Cp3.u, fb.y) annotation(
-        Line(points = {{-164, -88}, {-180, -88}, {-180, -112}, {56, -112}}, color = {0, 0, 127}));
-      connect(Cp3.y, as3.u2) annotation(
-        Line(points = {{-140, -88}, {-26, -88}, {-26, -86}}, color = {0, 0, 127}));
-      connect(as3.y, g3.u) annotation(
-        Line(points = {{-2, -80}, {8, -80}}, color = {0, 0, 127}));
+        Line(points = {{-164, -88}, {-180, -88}, {-180, -112}, {193, -112}}, color = {0, 0, 127}));
       connect(as3.u1, beta3.y) annotation(
-        Line(points = {{-26, -74}, {-32, -74}, {-32, 40}}, color = {0, 0, 127}));
+        Line(points = {{-32, -76}, {-32, 40}}, color = {0, 0, 127}));
       connect(Cs.y, beta1.u) annotation(
-        Line(points = {{-143, 86}, {-113, 86}, {-113, 62}, {-110, 62}}, color = {0, 0, 127}));
+        Line(points = {{-151, 86}, {-113, 86}, {-113, 62}, {-110, 62}}, color = {0, 0, 127}));
       connect(Cs.y, beta2.u) annotation(
-        Line(points = {{-143, 86}, {-73, 86}, {-73, 62}, {-70, 62}}, color = {0, 0, 127}));
+        Line(points = {{-151, 86}, {-73, 86}, {-73, 62}, {-70, 62}}, color = {0, 0, 127}));
       connect(Cs.y, beta3.u) annotation(
-        Line(points = {{-143, 86}, {-35, 86}, {-35, 62}, {-32, 62}}, color = {0, 0, 127}));
+        Line(points = {{-151, 86}, {-35, 86}, {-35, 62}, {-32, 62}}, color = {0, 0, 127}));
       connect(Pn3.y, add3.u3) annotation(
-        Line(points = {{62, -80}, {90, -80}, {90, -28}}, color = {0, 0, 127}));
-  connect(Pbal.y, Net.u) annotation(
-        Line(points = {{140, -20}, {144, -20}, {144, -22}, {148, -22}}, color = {0, 0, 127}));
-  connect(Net.y, fb.u) annotation(
-        Line(points = {{171, -22}, {196, -22}, {196, -112}, {78, -112}}, color = {0, 0, 127}));
+        Line(points = {{199, -80}, {227, -80}, {227, -28}}, color = {0, 0, 127}));
+      connect(Pbal.y, Net.u) annotation(
+        Line(points = {{277, -20}, {310, -20}}, color = {0, 0, 127}));
+      connect(Net.y, fb.u) annotation(
+        Line(points = {{333, -20}, {334, -20}, {334, -112}, {216, -112}}, color = {0, 0, 127}));
+      connect(Cp3.y, as3.u2) annotation(
+        Line(points = {{-140, -88}, {-32, -88}}, color = {0, 0, 127}));
+      connect(as4.y, g1.u) annotation(
+        Line(points = {{23, 6}, {83.5, 6}, {83.5, 0}, {114, 0}}, color = {0, 0, 127}));
+      connect(as1.y, as4.u2) annotation(
+        Line(points = {{-78, 0}, {0, 0}}, color = {0, 0, 127}));
+      connect(as2.y, as5.u2) annotation(
+        Line(points = {{-38, -40}, {36, -40}, {36, -42}}, color = {0, 0, 127}));
+      connect(as5.y, g2.u) annotation(
+        Line(points = {{59, -36}, {114, -36}, {114, -40}}, color = {0, 0, 127}));
+      connect(as3.y, as6.u2) annotation(
+        Line(points = {{-8, -82}, {86, -82}, {86, -86}}, color = {0, 0, 127}));
+      connect(as6.y, g3.u) annotation(
+        Line(points = {{110, -80}, {146, -80}}, color = {0, 0, 127}));
+      connect(timeSwitchBlock.y1, as4.u1) annotation(
+        Line(points = {{-7, 89}, {0, 89}, {0, 12}}, color = {0, 0, 127}));
+      connect(timeSwitchBlock.y2, as5.u1) annotation(
+        Line(points = {{-7, 86}, {36, 86}, {36, -30}}, color = {0, 0, 127}));
+      connect(timeSwitchBlock.y3, as6.u1) annotation(
+        Line(points = {{-7, 83}, {86, 83}, {86, -74}}, color = {0, 0, 127}));
+      connect(N_Pe.y, Pbal.u2) annotation(
+        Line(points = {{222, 56}, {268, 56}, {268, -12}}, color = {0, 0, 127}));
       annotation(
         Diagram(coordinateSystem(extent = {{-200, -100}, {200, 100}})),
         experiment(StartTime = 0, StopTime = 600, Tolerance = 1e-6, Interval = 1.2),
         __OpenModelica_commandLineOptions = "--matchingAlgorithm=PFPlusExt --indexReductionMethod=dynamicStateSelection -d=initialization,NLSanalyticJacobian -d=aliasConflicts -d=aliasConflicts ",
         __OpenModelica_simulationFlags(lv = "LOG_STATS", s = "dassl"));
     end BO_rigid_two_generators_PriSec;
+    
+    model TimeSwitchBlock
+    extends Modelica.Blocks.Icons.Block;
 
+    Modelica.Blocks.Interfaces.RealOutput y1 annotation(
+      Placement(transformation(extent={{ 80, 40},{100, 60}})));
+    Modelica.Blocks.Interfaces.RealOutput y2 annotation(
+      Placement(transformation(extent={{ 80, 10},{100, 30}})));
+    Modelica.Blocks.Interfaces.RealOutput y3 annotation(
+      Placement(transformation(extent={{ 80,-20},{100,  0}})));
+
+  equation
+    if time <  3600 then
+      // 30 MW request: only P1
+      y1 = 30e6/50e6;  y2 = 0;      y3 = 0;
+    elseif time <  7200 then
+      // 60 MW request: only P2
+      y1 = 0;      y2 = 60e6/100e6;  y3 = 0;
+    elseif time < 10800 then
+      // 90 MW request: only P2
+      y1 = 0;      y2 = 90e6/100e6;  y3 = 0;
+    elseif time < 14400 then
+      // 120 MW: f12, P1=36, P2=84
+      y1 = 36e6/50e6;   y2 = 84e6/100e6;  y3 = 0;
+    elseif time < 18000 then
+      // 150 MW: f12, P1=50, P2=100
+      y1 = 50e6/50e6;   y2 = 100e6/100e6; y3 = 0;
+    elseif time < 21600 then
+      // 180 MW: f23, P1=86.0795, P2=93.9205
+      y1 = 86.0795e6/50e6; y2 = 93.9205e6/100e6; y3 = 0;
+    elseif time < 25200 then
+      // 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
+      y1 = 35.7431e6/50e6; y2 = 83.8920e6/100e6; y3 = 90.3648e6/120e6;
+    elseif time < 28800 then
+      // 240 MW: f123, P1=46.6467, P2=91.4537, P3=101.8995
+      y1 = 46.6467e6/50e6; y2 = 91.4537e6/100e6; y3 = 101.8995e6/120e6;
+    elseif time < 32400 then
+      // 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
+      y1 = 35.7431e6/50e6; y2 = 83.8920e6/100e6; y3 = 90.3648e6/120e6;
+    elseif time < 36000 then
+      // 180 MW: f23, P1=86.0795, P2=93.9205
+      y1 = 86.0795e6/50e6; y2 = 93.9205e6/100e6; y3 = 0;
+    else
+      y1 = 0; y2 = 0; y3 = 0;
+    end if;
+  end TimeSwitchBlock;
+  // ───────────────────────────────────────────────────────
     extends Modelica.Icons.Package;
     extends Icons.CourseworkModel;
   end ElecSys_power_frequency_control;
