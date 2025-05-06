@@ -2,8 +2,8 @@ package AES_project
   package ElecSys_power_frequency_control
     model BO_rigid_two_generators_PriSec
       extends AES.Icons.CourseworkModel;
-      Modelica.Blocks.Sources.RealExpression N_Pe(y = if time < 3600 then 30e6 else if time < 7200 then 60e6 else if time < 10800 then 90e6 else if time < 14400 then 120e6 else if time < 18000 then 150e6 else if time < 21600 then 180e6 else if time < 25200 then 210e6 else if time < 28800 then 240e6 else if time < 32400 then 210e6 else if time < 36000 then 180e6 else 150e6) annotation(
-        Placement(transformation(origin = {210, 56}, extent = {{-10, -10}, {10, 10}})));
+      Modelica.Blocks.Sources.RealExpression N_Pe1(y = if time < 3600 then 30e6 else if time < 7200 then 60e6 else if time < 10800 then 90e6 else if time < 14400 then 120e6 else if time < 18000 then 150e6 else if time < 21600 then 180e6 else if time < 25200 then 210e6 else if time < 28800 then 240e6 else if time < 32400 then 210e6 else if time < 36000 then 180e6 else 150e6) annotation(
+        Placement(transformation(origin = {166, 56}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Math.Feedback Pbal annotation(
         Placement(transformation(origin = {268, -20}, extent = {{-10, 10}, {10, -10}})));
       Modelica.Blocks.Math.Gain fb(k = -1) annotation(
@@ -50,8 +50,20 @@ package AES_project
         Placement(transformation(origin = {48, -36}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Math.Add as6 annotation(
         Placement(transformation(origin = {98, -80}, extent = {{-10, -10}, {10, 10}})));
-  TimeSwitchBlock timeSwitchBlock annotation(
-        Placement(transformation(origin = {-16, 84}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Noise.NormalNoise normalNoise(samplePeriod = 200, mu = 0, sigma = 5e6)  annotation(
+        Placement(transformation(origin = {208, 28}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Math.Add as7 annotation(
+        Placement(transformation(origin = {252, 48}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Sources.RealExpression N_Pe2(y = if time < 3600 then 150e6 else if time < 7200 then 120e6 else if time < 10800 then 90e6 else if time < 14400 then 60e6 else if time < 18000 then 90e6 else if time < 21600 then 120e6 else if time < 25200 then 150e6 else if time < 28800 then 180e6 else if time < 32400 then 210e6 else if time < 36000 then 240e6 else 210e6) annotation(
+        Placement(transformation(origin = {166, 84}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Sources.RealExpression N_Pe3(y = if time < 3600 then 120e6 else if time < 7200 then 150e6 else if time < 10800 then 180e6 else if time < 14400 then 210e6 else if time < 18000 then 240e6 else if time < 21600 then 210e6 else if time < 25200 then 180e6 else if time < 28800 then 150e6 else if time < 32400 then 120e6 else if time < 36000 then 90e6 else 60e6) annotation(
+        Placement(transformation(origin = {166, 110}, extent = {{-10, -10}, {10, 10}})));
+  TimeSwitchBlock1 timeSwitchBlock1 annotation(
+        Placement(transformation(origin = {-14, 96}, extent = {{-10, -10}, {10, 10}})));
+  TimeSwitchBlock2 timeSwitchBlock2 annotation(
+        Placement(transformation(origin = {-14, 126}, extent = {{-10, -10}, {10, 10}})));
+  TimeSwitchBlock3 timeSwitchBlock3 annotation(
+        Placement(transformation(origin = {-14, 156}, extent = {{-10, -10}, {10, 10}})));
     equation
       connect(g1.y, Pn1.u) annotation(
         Line(points = {{137, 0}, {153, 0}}, color = {0, 0, 127}));
@@ -109,14 +121,18 @@ package AES_project
         Line(points = {{-8, -82}, {86, -82}, {86, -86}}, color = {0, 0, 127}));
       connect(as6.y, g3.u) annotation(
         Line(points = {{110, -80}, {146, -80}}, color = {0, 0, 127}));
-      connect(timeSwitchBlock.y1, as4.u1) annotation(
-        Line(points = {{-7, 89}, {0, 89}, {0, 12}}, color = {0, 0, 127}));
-      connect(timeSwitchBlock.y2, as5.u1) annotation(
-        Line(points = {{-7, 86}, {36, 86}, {36, -30}}, color = {0, 0, 127}));
-      connect(timeSwitchBlock.y3, as6.u1) annotation(
-        Line(points = {{-7, 83}, {86, 83}, {86, -74}}, color = {0, 0, 127}));
-      connect(N_Pe.y, Pbal.u2) annotation(
-        Line(points = {{222, 56}, {268, 56}, {268, -12}}, color = {0, 0, 127}));
+      connect(normalNoise.y, as7.u2) annotation(
+        Line(points = {{220, 28}, {240, 28}, {240, 42}}, color = {0, 0, 127}));
+      connect(as7.y, Pbal.u2) annotation(
+        Line(points = {{264, 48}, {268, 48}, {268, -12}}, color = {0, 0, 127}));
+  connect(timeSwitchBlock3.y1, as4.u1) annotation(
+        Line(points = {{-4, 162}, {0, 162}, {0, 12}}, color = {0, 0, 127}));
+  connect(timeSwitchBlock3.y2, as5.u1) annotation(
+        Line(points = {{-4, 158}, {36, 158}, {36, -30}}, color = {0, 0, 127}));
+  connect(timeSwitchBlock3.y3, as6.u1) annotation(
+        Line(points = {{-4, 156}, {86, 156}, {86, -74}}, color = {0, 0, 127}));
+  connect(N_Pe3.y, as7.u1) annotation(
+        Line(points = {{178, 110}, {240, 110}, {240, 54}}, color = {0, 0, 127}));
       annotation(
         Diagram(coordinateSystem(extent = {{-200, -100}, {200, 100}})),
         experiment(StartTime = 0, StopTime = 600, Tolerance = 1e-6, Interval = 1.2),
@@ -124,11 +140,10 @@ package AES_project
         __OpenModelica_simulationFlags(lv = "LOG_STATS", s = "dassl"));
     end BO_rigid_two_generators_PriSec;
     
-    model TimeSwitchBlock
+    model TimeSwitchBlock1
     extends Modelica.Blocks.Icons.Block;
-
-    Modelica.Blocks.Interfaces.RealOutput y1 annotation(
-      Placement(transformation(extent={{ 80, 40},{100, 60}})));
+  Modelica.Blocks.Interfaces.RealOutput y1 annotation(
+        Placement(transformation(extent = {{80, 40}, {100, 60}})));
     Modelica.Blocks.Interfaces.RealOutput y2 annotation(
       Placement(transformation(extent={{ 80, 10},{100, 30}})));
     Modelica.Blocks.Interfaces.RealOutput y3 annotation(
@@ -168,7 +183,103 @@ package AES_project
     else
       y1 = 0; y2 = 0; y3 = 0;
     end if;
-  end TimeSwitchBlock;
+  annotation(
+        Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics = {Rectangle(extent = {{-80, 80}, {80, -80}}, fillColor = {200, 200, 255}, fillPattern = FillPattern.Solid), Text(origin = {0, 60}, extent = {{-40, 20}, {40, 0}}, textString = "TimeSwitch", fontSize = 14), Line(points = {{-60, 0}, {60, 0}}, thickness = 2), Polygon(points = {{-50, -20}, {0, -80}, {50, -20}}, fillColor = {150, 150, 255})}));
+end TimeSwitchBlock1;
+  // ───────────────────────────────────────────────────────
+    model TimeSwitchBlock2
+    extends Modelica.Blocks.Icons.Block;
+  Modelica.Blocks.Interfaces.RealOutput y1 annotation(
+        Placement(transformation(extent = {{80, 40}, {100, 60}})));
+    Modelica.Blocks.Interfaces.RealOutput y2 annotation(
+      Placement(transformation(extent={{ 80, 10},{100, 30}})));
+    Modelica.Blocks.Interfaces.RealOutput y3 annotation(
+      Placement(transformation(extent={{ 80,-20},{100,  0}})));
+
+  equation
+if time <  3600 then
+  // 150 MW: f12, P1=50, P2=100
+  y1 = 50e6/50e6;   y2 = 100e6/100e6; y3 = 0;
+elseif time <  7200 then
+  // 120 MW: f12, P1=36, P2=84
+  y1 = 36e6/50e6;   y2 = 84e6/100e6;  y3 = 0;
+elseif time < 10800 then
+  // 90 MW: only P2
+  y1 = 0;      y2 = 90e6/100e6;  y3 = 0;
+elseif time < 14400 then
+  // 60 MW: only P2
+  y1 = 0;      y2 = 60e6/100e6;  y3 = 0;
+elseif time < 18000 then
+  // 90 MW: only P2
+  y1 = 0;      y2 = 90e6/100e6;  y3 = 0;
+elseif time < 21600 then
+  // 120 MW: f12, P1=36, P2=84
+  y1 = 36e6/50e6;   y2 = 84e6/100e6;  y3 = 0;
+elseif time < 25200 then
+  // 150 MW: f12, P1=50, P2=100
+  y1 = 50e6/50e6;   y2 = 100e6/100e6; y3 = 0;
+elseif time < 28800 then
+  // 180 MW: f23, P1=86.0795, P2=93.9205
+  y1 = 86.0795e6/50e6; y2 = 93.9205e6/100e6; y3 = 0;
+elseif time < 32400 then
+  // 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
+  y1 = 35.7431e6/50e6; y2 = 83.8920e6/100e6; y3 = 90.3648e6/120e6;
+elseif time < 36000 then
+  // 240 MW: f123, P1=46.6467, P2=91.4537, P3=101.8995
+  y1 = 46.6467e6/50e6; y2 = 91.4537e6/100e6; y3 = 101.8995e6/120e6;
+else
+  y1 = 0; y2 = 0; y3 = 0;
+    end if;
+  annotation(
+        Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics = {Rectangle(extent = {{-80, 80}, {80, -80}}, fillColor = {200, 200, 255}, fillPattern = FillPattern.Solid), Text(origin = {0, 60}, extent = {{-40, 20}, {40, 0}}, textString = "TimeSwitch", fontSize = 14), Line(points = {{-60, 0}, {60, 0}}, thickness = 2), Polygon(points = {{-50, -20}, {0, -80}, {50, -20}}, fillColor = {150, 150, 255})}));
+end TimeSwitchBlock2;
+  // ───────────────────────────────────────────────────────
+      model TimeSwitchBlock3
+    extends Modelica.Blocks.Icons.Block;
+  Modelica.Blocks.Interfaces.RealOutput y1 annotation(
+        Placement(transformation(extent = {{80, 40}, {100, 60}})));
+    Modelica.Blocks.Interfaces.RealOutput y2 annotation(
+      Placement(transformation(extent={{ 80, 10},{100, 30}})));
+    Modelica.Blocks.Interfaces.RealOutput y3 annotation(
+      Placement(transformation(extent={{ 80,-20},{100,  0}})));
+
+  equation
+if time <  3600 then
+  // 150 MW: f12, P1=50, P2=100
+  y1 = 50e6/50e6;   y2 = 100e6/100e6; y3 = 0;
+elseif time <  7200 then
+  // 120 MW: f12, P1=36, P2=84
+  y1 = 36e6/50e6;   y2 = 84e6/100e6;  y3 = 0;
+elseif time < 10800 then
+  // 90 MW: only P2
+  y1 = 0;      y2 = 90e6/100e6;  y3 = 0;
+elseif time < 14400 then
+  // 60 MW: only P2
+  y1 = 0;      y2 = 60e6/100e6;  y3 = 0;
+elseif time < 18000 then
+  // 90 MW: only P2
+  y1 = 0;      y2 = 90e6/100e6;  y3 = 0;
+elseif time < 21600 then
+  // 120 MW: f12, P1=36, P2=84
+  y1 = 36e6/50e6;   y2 = 84e6/100e6;  y3 = 0;
+elseif time < 25200 then
+  // 150 MW: f12, P1=50, P2=100
+  y1 = 50e6/50e6;   y2 = 100e6/100e6; y3 = 0;
+elseif time < 28800 then
+  // 180 MW: f23, P1=86.0795, P2=93.9205
+  y1 = 86.0795e6/50e6; y2 = 93.9205e6/100e6; y3 = 0;
+elseif time < 32400 then
+  // 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
+  y1 = 35.7431e6/50e6; y2 = 83.8920e6/100e6; y3 = 90.3648e6/120e6;
+elseif time < 36000 then
+  // 240 MW: f123, P1=46.6467, P2=91.4537, P3=101.8995
+  y1 = 46.6467e6/50e6; y2 = 91.4537e6/100e6; y3 = 101.8995e6/120e6;
+else
+  y1 = 0; y2 = 0; y3 = 0;
+    end if;
+  annotation(
+        Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics = {Rectangle(extent = {{-80, 80}, {80, -80}}, fillColor = {200, 200, 255}, fillPattern = FillPattern.Solid), Text(origin = {0, 60}, extent = {{-40, 20}, {40, 0}}, textString = "TimeSwitch", fontSize = 14), Line(points = {{-60, 0}, {60, 0}}, thickness = 2), Polygon(points = {{-50, -20}, {0, -80}, {50, -20}}, fillColor = {150, 150, 255})}));
+end TimeSwitchBlock3;
   // ───────────────────────────────────────────────────────
     extends Modelica.Icons.Package;
     extends Icons.CourseworkModel;
