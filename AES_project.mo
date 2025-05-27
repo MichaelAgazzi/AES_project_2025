@@ -34,9 +34,9 @@ package AES_project
         Placement(transformation(origin = {166, -80}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Continuous.TransferFunction Cp3(a = {1}, b = {0.3379}) annotation(
         Placement(transformation(origin = {-162, -92}, extent = {{-10, -10}, {10, 10}})));
-      Modelica.Blocks.Continuous.TransferFunction Net(a = {(55000*(2*3.14*50)^2), 0}, b = {1}) annotation(
+      Modelica.Blocks.Continuous.TransferFunction Net(a = {(55000*(2*3.14*50)^2), 0}, b = {1}, final y_start) annotation(
         Placement(transformation(origin = {312, -40}, extent = {{-10, -10}, {10, 10}})));
-      Modelica.Blocks.Noise.NormalNoise normalNoise(samplePeriod = 180, mu = 0, sigma = 2e6) annotation(
+      Modelica.Blocks.Noise.NormalNoise normalNoise(samplePeriod = 180, mu = 1, sigma = 2e6) annotation(
         Placement(transformation(origin = {208, 28}, extent = {{-10, -10}, {10, 10}})));
       Modelica.Blocks.Math.Add as7 annotation(
         Placement(transformation(origin = {252, 34}, extent = {{-10, -10}, {10, 10}})));
@@ -45,23 +45,35 @@ package AES_project
       Modelica.Blocks.Sources.RealExpression N_Pe3(y = if time < 3600 then 120e6 else if time < 7200 then 150e6 else if time < 10800 then 180e6 else if time < 14400 then 210e6 else if time < 18000 then 240e6 else if time < 21600 then 210e6 else if time < 25200 then 180e6 else if time < 28800 then 150e6 else if time < 32400 then 120e6 else if time < 36000 then 90e6 else 60e6) annotation(
         Placement(transformation(origin = {208, 96}, extent = {{-10, -10}, {10, 10}})));
       TimeSwitchBlock1 Tertiary_control_1 annotation(
-        Placement(transformation(origin = {-14, 96}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {-32, 100}, extent = {{-10, -10}, {10, 10}})));
       TimeSwitchBlock2 Tertiary_control_2 annotation(
-        Placement(transformation(origin = {-14, 126}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {-30, 130}, extent = {{-10, -10}, {10, 10}})));
       TimeSwitchBlock3 Tertiary_control_3 annotation(
-        Placement(transformation(origin = {-14, 156}, extent = {{-10, -10}, {10, 10}})));
-  Modelica.Blocks.Sources.RealExpression fo(y = 50) annotation(
+        Placement(transformation(origin = {-30, 162}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Sources.RealExpression fo(y = 0) annotation(
         Placement(transformation(origin = {-294, 86}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Math.Feedback fbal annotation(
-        Placement(transformation(origin = {-208, 86}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {-212, 86}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Math.Add as4 annotation(
-        Placement(transformation(origin = {28, 0}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {6, 0}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Math.Add as5 annotation(
-        Placement(transformation(origin = {58, -40}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {40, -40}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Math.Add as6 annotation(
-        Placement(transformation(origin = {96, -80}, extent = {{-10, -10}, {10, 10}})));
+        Placement(transformation(origin = {70, -80}, extent = {{-10, -10}, {10, 10}})));
   Modelica.Blocks.Continuous.TransferFunction Pre_Filter(a = {200, 1}, b = {1}) annotation(
         Placement(transformation(origin = {-252, 86}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Sources.RealExpression fo1(y = -0.8) annotation(
+        Placement(transformation(origin = {-266, 156}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Sources.RealExpression fo2(y = 0.8) annotation(
+        Placement(transformation(origin = {-266, 136}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMax = 1.1, final uMin = 0.0)  annotation(
+        Placement(transformation(origin = {96, 0}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter1(uMax = 1.1, final uMin = 0.0) annotation(
+        Placement(transformation(origin = {98, -40}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter11(uMax = 1.1, final uMin = 0.0) annotation(
+        Placement(transformation(origin = {98, -80}, extent = {{-10, -10}, {10, 10}})));
+  Modelica.Blocks.Sources.Constant step(k = 80000)  annotation(
+        Placement(transformation(origin = {206, 144}, extent = {{-10, -10}, {10, 10}})));
     equation
       connect(g1.y, Pn1.u) annotation(
         Line(points = {{137, 0}, {153, 0}}, color = {0, 0, 127}));
@@ -79,10 +91,6 @@ package AES_project
         Line(points = {{279, -40}, {300, -40}}, color = {0, 0, 127}));
       connect(Cp3.y, as3.u2) annotation(
         Line(points = {{-151, -92}, {-32, -92}}, color = {0, 0, 127}));
-      connect(normalNoise.y, as7.u2) annotation(
-        Line(points = {{220, 28}, {240, 28}}, color = {0, 0, 127}));
-      connect(as7.y, Pbal.u2) annotation(
-        Line(points = {{263, 34}, {270, 34}, {270, -32}}, color = {0, 0, 127}));
       connect(N_Pe1.y, as7.u1) annotation(
         Line(points = {{219, 56}, {240, 56}, {240, 40}}, color = {0, 0, 127}));
       connect(Cs.y, as1.u1) annotation(
@@ -91,49 +99,60 @@ package AES_project
         Line(points = {{-150, 86}, {-62, 86}, {-62, -40}}, color = {0, 0, 127}));
       connect(Cs.y, as3.u1) annotation(
         Line(points = {{-150, 86}, {-32, 86}, {-32, -80}}, color = {0, 0, 127}));
-      connect(Net.y, fbal.u2) annotation(
-        Line(points = {{323, -40}, {338, -40}, {338, -124}, {-208, -124}, {-208, 78}}, color = {0, 0, 127}));
       connect(fbal.y, Cs.u) annotation(
-        Line(points = {{-199, 86}, {-174, 86}}, color = {0, 0, 127}));
+        Line(points = {{-203, 86}, {-174, 86}}, color = {0, 0, 127}));
       connect(as1.y, as4.u2) annotation(
-        Line(points = {{-78, -6}, {16, -6}}, color = {0, 0, 127}));
+        Line(points = {{-78, -6}, {-6, -6}}, color = {0, 0, 127}));
       connect(Tertiary_control_1.y1, as4.u1) annotation(
-        Line(points = {{-4, 102}, {16, 102}, {16, 6}}, color = {0, 0, 127}));
+        Line(points = {{-23, 105}, {-23, 6}, {-6, 6}}, color = {0, 0, 127}));
       connect(Tertiary_control_1.y2, as5.u1) annotation(
-        Line(points = {{-4, 98}, {42, 98}, {42, -34}, {46, -34}}, color = {0, 0, 127}));
+        Line(points = {{-23, 102}, {22, 102}, {22, -32}, {23, -32}, {23, -34}, {28, -34}}, color = {0, 0, 127}));
       connect(Tertiary_control_1.y3, as6.u1) annotation(
-        Line(points = {{-4, 96}, {76, 96}, {76, -74}, {84, -74}}, color = {0, 0, 127}));
+        Line(points = {{-23, 99}, {58, 99}, {58, -74}}, color = {0, 0, 127}));
       connect(as3.y, as6.u2) annotation(
-        Line(points = {{-8, -86}, {84, -86}}, color = {0, 0, 127}));
+        Line(points = {{-8, -86}, {58, -86}}, color = {0, 0, 127}));
       connect(as2.y, as5.u2) annotation(
-        Line(points = {{-38, -46}, {46, -46}}, color = {0, 0, 127}));
-      connect(as4.y, g1.u) annotation(
-        Line(points = {{40, 0}, {114, 0}}, color = {0, 0, 127}));
-      connect(as5.y, g2.u) annotation(
-        Line(points = {{70, -40}, {114, -40}}, color = {0, 0, 127}));
-      connect(as6.y, g3.u) annotation(
-        Line(points = {{108, -80}, {114, -80}}, color = {0, 0, 127}));
+        Line(points = {{-38, -46}, {28, -46}}, color = {0, 0, 127}));
       connect(fbal.y, Cp1.u) annotation(
-        Line(points = {{-199, 86}, {-188, 86}, {-188, -12}, {-174, -12}}, color = {0, 0, 127}));
+        Line(points = {{-203, 86}, {-188, 86}, {-188, -12}, {-174, -12}}, color = {0, 0, 127}));
       connect(fbal.y, Cp2.u) annotation(
-        Line(points = {{-199, 86}, {-188, 86}, {-188, -52}, {-174, -52}}, color = {0, 0, 127}));
+        Line(points = {{-203, 86}, {-188, 86}, {-188, -52}, {-174, -52}}, color = {0, 0, 127}));
       connect(fbal.y, Cp3.u) annotation(
-        Line(points = {{-199, 86}, {-188, 86}, {-188, -92}, {-174, -92}}, color = {0, 0, 127}));
+        Line(points = {{-203, 86}, {-188, 86}, {-188, -92}, {-174, -92}}, color = {0, 0, 127}));
       connect(Pn2.y, add.u2) annotation(
         Line(points = {{178, -40}, {228, -40}}, color = {0, 0, 127}));
       connect(Pn1.y, add.u1) annotation(
         Line(points = {{178, 0}, {200, 0}, {200, -32}, {228, -32}}, color = {0, 0, 127}));
       connect(Pn3.y, add.u3) annotation(
         Line(points = {{178, -80}, {200, -80}, {200, -48}, {228, -48}}, color = {0, 0, 127}));
-  connect(fo.y, Pre_Filter.u) annotation(
+      connect(fo.y, Pre_Filter.u) annotation(
         Line(points = {{-282, 86}, {-264, 86}}, color = {0, 0, 127}));
-  connect(Pre_Filter.y, fbal.u1) annotation(
-        Line(points = {{-240, 86}, {-216, 86}}, color = {0, 0, 127}));
+      connect(Pre_Filter.y, fbal.u1) annotation(
+        Line(points = {{-240, 86}, {-220, 86}}, color = {0, 0, 127}));
+      connect(limiter.y, g1.u) annotation(
+        Line(points = {{107, 0}, {114, 0}}, color = {0, 0, 127}));
+      connect(as4.y, limiter.u) annotation(
+        Line(points = {{17, 0}, {84, 0}}, color = {0, 0, 127}));
+      connect(as5.y, limiter1.u) annotation(
+        Line(points = {{51, -40}, {86, -40}}, color = {0, 0, 127}));
+      connect(limiter1.y, g2.u) annotation(
+        Line(points = {{110, -40}, {114, -40}}, color = {0, 0, 127}));
+      connect(limiter11.y, g3.u) annotation(
+        Line(points = {{109, -80}, {114, -80}}, color = {0, 0, 127}));
+      connect(as6.y, limiter11.u) annotation(
+        Line(points = {{82, -80}, {86, -80}}, color = {0, 0, 127}));
+      connect(Net.y, fbal.u2) annotation(
+        Line(points = {{324, -40}, {382, -40}, {382, -204}, {-212, -204}, {-212, 78}}, color = {0, 0, 127}));
+      connect(normalNoise.y, as7.u2) annotation(
+        Line(points = {{220, 28}, {240, 28}}, color = {0, 0, 127}));
+  connect(as7.y, Pbal.u2) annotation(
+        Line(points = {{264, 34}, {268, 34}, {268, -32}, {270, -32}}, color = {0, 0, 127}));
       annotation(
-        Diagram(coordinateSystem(extent = {{-200, -100}, {200, 100}})),
+        Diagram(coordinateSystem(extent = {{-500, -500}, {500, 500}})),
         experiment(StartTime = 0, StopTime = 600, Tolerance = 1e-6, Interval = 1.2),
         __OpenModelica_commandLineOptions = "--matchingAlgorithm=PFPlusExt --indexReductionMethod=dynamicStateSelection -d=initialization,NLSanalyticJacobian -d=aliasConflicts -d=aliasConflicts ",
-        __OpenModelica_simulationFlags(lv = "LOG_STATS", s = "dassl"));
+        __OpenModelica_simulationFlags(lv = "LOG_STATS", s = "dassl"),
+  Icon(coordinateSystem(extent = {{-500, -500}, {500, 500}})));
     end BO_rigid_two_generators_PriSec;
 
     model TimeSwitchBlock1
@@ -146,52 +165,52 @@ package AES_project
         Placement(transformation(extent = {{80, -20}, {100, 0}})));
     equation
       if time < 3600 then
-// 30 MW request: only P1
+    // 30 MW request: only P1
         y1 = 30e6/50e6;
         y2 = 0;
         y3 = 0;
       elseif time < 7200 then
-// 60 MW request: only P2
+    // 60 MW request: only P2
         y1 = 0;
         y2 = 60e6/100e6;
         y3 = 0;
       elseif time < 10800 then
-// 90 MW request: only P2
+    // 90 MW request: only P2
         y1 = 0;
         y2 = 90e6/100e6;
         y3 = 0;
       elseif time < 14400 then
-// 120 MW: f12, P1=36, P2=84
+    // 120 MW: f12, P1=36, P2=84
         y1 = 36e6/50e6;
         y2 = 84e6/100e6;
         y3 = 0;
       elseif time < 18000 then
-// 150 MW: f12, P1=50, P2=100
+    // 150 MW: f12, P1=50, P2=100
         y1 = 50e6/50e6;
         y2 = 100e6/100e6;
         y3 = 0;
       elseif time < 21600 then
-// 180 MW: f23, P1=86.0795, P2=93.9205
+    // 180 MW: f23, P1=86.0795, P2=93.9205
         y1 = 0;
         y2 = 86.0795e6/100e6;
         y3 = 93.9205e6/120e6;
       elseif time < 25200 then
-// 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
+    // 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
         y1 = 35.7431e6/50e6;
         y2 = 83.8920e6/100e6;
         y3 = 90.3648e6/120e6;
       elseif time < 28800 then
-// 240 MW: f123, P1=46.6467, P2=91.4537, P3=101.8995
+    // 240 MW: f123, P1=46.6467, P2=91.4537, P3=101.8995
         y1 = 46.6467e6/50e6;
         y2 = 91.4537e6/100e6;
         y3 = 101.8995e6/120e6;
       elseif time < 32400 then
-// 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
+    // 210 MW: f123, P1=35.7431, P2=83.8920, P3=90.3648
         y1 = 35.7431e6/50e6;
         y2 = 83.8920e6/100e6;
         y3 = 90.3648e6/120e6;
       elseif time < 36000 then
-// 180 MW: f23, P1=86.0795, P2=93.9205
+    // 180 MW: f23, P1=86.0795, P2=93.9205
         y1 = 0;
         y2 = 86.0795e6/100e6;
         y3 = 93.9205e6/120e6;
